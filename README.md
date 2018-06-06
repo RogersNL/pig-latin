@@ -52,7 +52,7 @@ _
 
 ## Known Bugs
 
-_No known bugs._
+_Doesn't properly add "way" to end of vowel words.  Doesn't properly translate "qu" or words starting with "y"._
 
 ## Support and contact details
 
