@@ -1,14 +1,15 @@
 $(document).ready(function(){
   // INCLUDED CHARACTERS
-  var includedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,-'";
+  var includedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,-'.";
   var vowels = "AEIOUaeiou";
-  var vowelsWithY = "AEIOUYaeiouy";
+  var vowelsWithY = "AEIOUQYaeiouqy";
 
   // FUNCTIONS
     // TURN WORD TO ARRAY EX:HELLO -> ["H","E","L","L","O"]
+    var splitCharacters = [];
     function wordToArray(string, array) {
-    for (i = 0; i < string.length; i++)
-      array.push(string.substring(i,i+1));
+      for (i = 0; i < string.length; i++)
+    array.push(string.substring(i,i+1));
     }
     // TEST IF WORD HAS INCLUDED CHARACTERS AND STORES RESULT
     // INTO "alphaCheck" AS BOOLEAN EX: DOES "GOODBY3" HAVE ONLY
@@ -31,8 +32,8 @@ $(document).ready(function(){
     }
     // FUNCTION THAT CHECKS FOR VOWELS
     var vowelCheck = true;
-    function testIfVowel(word, standardVowels) {
-      vowelCheck = word.charAt(0).includes(standardVowels);
+    function testIfVowel(array, standardVowels) {
+      vowelCheck = standardVowels.includes(array[0]);
       return vowelCheck;
     }
     // FUNCTION THAT CHANGES WORDS THAT START WITH CONSONANTS
@@ -48,8 +49,15 @@ $(document).ready(function(){
     function testVowelPosition(stringStandard, arrayChecking) {
     	for (i = 0; i < arrayChecking.length; i++) {
       	consonantCheck = stringStandard.includes(arrayChecking[i]);
-        if (!consonantCheck) {
-        	position = position + 1;
+        if ("Yy".includes(arrayChecking[i]) && i === 0) {
+          position++;
+        } else if (!consonantCheck) {
+        	position++;
+        } else if ("Qq".includes(arrayChecking[i])) {
+          position++;
+          if ("Uu".includes(arrayChecking[i+1])) {
+            position++;
+          }
         } else {
         	i = arrayChecking;
         }
@@ -67,18 +75,25 @@ $(document).ready(function(){
   	function splitSentence(string) {
     	return string.split(" ");
   	}
+    //FUNCTION FOR TESTING WHETHER OR NOT TO USE THE BRANCH FOR SINGLE LETTER WORD OR WORD STARING WITH VOWEL
+    function isFirstAVowel(word) {
+      var vowelTestArray = [];
+      wordToArray(word, vowelTestArray);
+      testIfVowel(vowelTestArray, vowels);
+      return vowelCheck;
+    }
+
 
   $("#form-pig-latin").submit(function(event){
     event.preventDefault();
     var userInput = $("input#sentence").val();
 
     var mySentence = splitSentence(userInput);
-    console.log(mySentence);
     var output = [];
     mySentence.forEach(function(inputtedText) {
       if (wordCheck(inputtedText, includedCharacters)) {
-        if (inputtedText.length > 1 && testIfVowel(inputtedText, vowels)){
-          var addWay = inputtedText + "way"
+        if (inputtedText.length === 1 || isFirstAVowel(inputtedText)){
+          var addWay = inputtedText + "way";
           output.push(addWay);
         } else {
           moveConsonant(inputtedText, firstVowelPosition(inputtedText, vowelsWithY));
@@ -90,7 +105,5 @@ $(document).ready(function(){
       }
     })
     $("#translated-sentence").text(output.join(" "));
-    // for (i = 0; i < sentenceWords.length; i++) {
-    
   });
 });
