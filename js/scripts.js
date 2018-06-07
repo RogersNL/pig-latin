@@ -1,6 +1,6 @@
 $(document).ready(function(){
   // INCLUDED CHARACTERS
-  var includedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,-'.";
+  var includedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,-'";
   var vowels = "AEIOUaeiou";
   var vowelsWithY = "AEIOUQYaeiouqy";
 
@@ -18,8 +18,20 @@ $(document).ready(function(){
     function testIfAlpha(stringStandard, arrayChecking) {
     	for (i = 0; i < arrayChecking.length; i++) {
     		alphaCheck = stringStandard.includes(arrayChecking[i]);
-  			if (!alphaCheck) {
-        	i = arrayChecking.length;
+        if (arrayChecking[i] === arrayChecking[arrayChecking.length-1]) {
+          alert("last element");
+          if (!".".includes(arrayChecking[arrayChecking.length-1])) {
+          alert("not .");
+          alphaCheck = false;
+          break;
+          } else {
+            alert("is a .");
+            alphaCheck = true;
+          }
+        }
+        if (!alphaCheck) {
+          alert("not in alphacheck")
+        	break;
         }
     	}
     }
@@ -82,6 +94,14 @@ $(document).ready(function(){
       testIfVowel(vowelTestArray, vowels);
       return vowelCheck;
     }
+    //FUNCTION THAT CHECKS FOR "." AT THE END AND REMOVES IT
+    function dotCheck(string) {
+      var dotCheckArray = [];
+      wordToArray(string, dotCheckArray);
+      if (".".includes(dotCheckArray[dotCheckArray.length-1])) {
+        return true;
+      }
+    }
 
 
   $("#form-pig-latin").submit(function(event){
@@ -93,12 +113,23 @@ $(document).ready(function(){
     mySentence.forEach(function(inputtedText) {
       if (wordCheck(inputtedText, includedCharacters)) {
         if (inputtedText.length === 1 || isFirstAVowel(inputtedText)){
+          if (dotCheck(inputtedText)) {
+            inputtedText = inputtedText.substring(0,inputtedText.length - 1);
+            var addWay = inputtedText + "way.";
+          } else {
           var addWay = inputtedText + "way";
+          }
           output.push(addWay);
         } else {
+          if (dotCheck(inputtedText)) {
+            inputtedText = inputtedText.substring(0,inputtedText.length - 1);
+            moveConsonant(inputtedText, firstVowelPosition(inputtedText, vowelsWithY));
+            output.push(newWord + ".");
+          } else {
           moveConsonant(inputtedText, firstVowelPosition(inputtedText, vowelsWithY));
           output.push(newWord);
           position = 0;
+          }
         }
       } else {
         output.push(inputtedText);
