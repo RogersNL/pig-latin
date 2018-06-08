@@ -18,17 +18,17 @@ $(document).ready(function(){
     function testIfAlpha(stringStandard, arrayChecking) {
     	for (i = 0; i < arrayChecking.length; i++) {
     		alphaCheck = stringStandard.includes(arrayChecking[i]);
-        if (arrayChecking[i] === arrayChecking[arrayChecking.length-1]) {
-          alert("last element");
-          if (!".".includes(arrayChecking[arrayChecking.length-1])) {
-          alert("not .");
-          alphaCheck = false;
-          break;
-          } else {
-            alert("is a .");
-            alphaCheck = true;
-          }
-        }
+        // if (arrayChecking[i] === arrayChecking[arrayChecking.length-1]) {
+        //   alert("last element");
+        //   if (!".".includes(arrayChecking[arrayChecking.length-1])) {
+        //   alert("not .");
+        //   alphaCheck = false;
+        //   break;
+        //   } else {
+        //     alert("is a .");
+        //     alphaCheck = true;
+        //   }
+        // }
         if (!alphaCheck) {
           alert("not in alphacheck")
         	break;
